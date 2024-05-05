@@ -26,7 +26,7 @@ impl KashidaCandidate {
 }
 
 #[must_use]
-pub fn run(input: &str) -> Box<[usize]> {
+pub fn find_kashidas(input: &str) -> Box<[usize]> {
     let mut candidates: HashMap<_, KashidaCandidate> = HashMap::with_capacity(input.len() / 2);
 
     let word_segmenter = icu_segmenter::WordSegmenter::new_auto();
@@ -47,7 +47,7 @@ pub fn run(input: &str) -> Box<[usize]> {
             .tuple_windows();
 
         for glyph_window in graphemes {
-            find_kashidas(glyph_window, input, |kc| {
+            find_kashidas_in_glyph_run(glyph_window, input, |kc| {
                 match candidates.entry(word_idx) {
                     Entry::Occupied(mut e) if kc.bp_priority <= e.get().bp_priority => e.insert(kc),
                     Entry::Vacant(e) => *e.insert(kc),
@@ -64,7 +64,7 @@ pub fn run(input: &str) -> Box<[usize]> {
 
 // BIG MATCH based on:
 // https://web.archive.org/web/20030719183154/http://www.microsoft.com/middleeast/msdn/JustifyingText-CSS.aspx
-fn find_kashidas(
+fn find_kashidas_in_glyph_run(
     (g1, g2, g3, g4): (Option<&str>, Option<&str>, Option<&str>, Option<&str>),
     input: &str,
     mut insert_candidate: impl FnMut(KashidaCandidate),
