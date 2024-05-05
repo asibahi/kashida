@@ -3,6 +3,7 @@
 extern crate alloc;
 
 mod codepoints;
+mod ffi;
 
 use alloc::{boxed::Box, vec::Vec};
 use codepoints::*;
