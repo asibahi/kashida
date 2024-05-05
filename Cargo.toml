@@ -1,7 +1,13 @@
 [package]
 name = "kashida"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
+authors = ["Abdul Rahman Sibahi <a.sibahi@gmail.com"]
+description = "Crate to insert Kashidas into Arabic text, for justification purposes."
+license = "MIT"
+repository = "https://github.com/asibahi/kashida"
+reademe = "README.md"
+keyword = ["arabic", "text"]
 
 [dependencies]
 constcat = "0.5.0"

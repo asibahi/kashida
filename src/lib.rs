@@ -25,8 +25,30 @@ impl KashidaCandidate {
     }
 }
 
+/// Script to find Kashidas in. Only Arabic for now but potential to add Syriac and Nko
+#[non_exhaustive]
+#[derive(Clone, Copy)]
+pub enum Script {
+    Arabic,
+}
+
+/// Main entry point.
+///
+/// Does not verify string is valid Arabic script.
+///
+/// Returns a list of byte-positions to insert the Kashida in, sorted by priority.
+///
+/// Does not guarantee a stable ordering for the same string. However, all positions are guaranteed to be valid.
+/// If a Kashida is suggested at a wrong position, please report the bug.
 #[must_use]
-pub fn find_kashidas(input: &str) -> Box<[usize]> {
+pub fn find_kashidas(input: &str, script: Script) -> Box<[usize]> {
+    match script {
+        Script::Arabic => find_kashidas_arabic(input),
+    }
+}
+
+#[must_use]
+fn find_kashidas_arabic(input: &str) -> Box<[usize]> {
     let mut candidates: HashMap<_, KashidaCandidate> = HashMap::with_capacity(input.len() / 2);
 
     let word_segmenter = icu_segmenter::WordSegmenter::new_auto();
@@ -50,8 +72,8 @@ pub fn find_kashidas(input: &str) -> Box<[usize]> {
             find_kashidas_in_glyph_run(glyph_window, input, |kc| {
                 match candidates.entry(word_idx) {
                     Entry::Occupied(mut e) if kc.bp_priority <= e.get().bp_priority => e.insert(kc),
+                    Entry::Occupied(_) => kc,
                     Entry::Vacant(e) => *e.insert(kc),
-                    _ => kc,
                 };
             });
         }

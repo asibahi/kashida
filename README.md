@@ -6,4 +6,4 @@ The library has currently one function, named `find_kashidas`. You give it an Ar
 
 Oh it is `no_std` as well.
 
-Current plan before publishing on crates.io is to add some surrounding API to allow, potentially, extending the crate to other scripts (such as Syriac or Nko). The reason I am not adding those scripts myself is that I cannot read Syriac or Nko. But some better people might.
+The `Script` enum has only one Script currently but it allows extending the crate to other scripts (such as Syriac or Nko). The reason I am not adding those scripts myself is that I cannot read Syriac or Nko. But some better people might.
