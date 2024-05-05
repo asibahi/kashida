@@ -6,8 +6,8 @@ authors = ["Abdul Rahman Sibahi <a.sibahi@gmail.com"]
 description = "Crate to insert Kashidas into Arabic text, for justification purposes."
 license = "MIT"
 repository = "https://github.com/asibahi/kashida"
-reademe = "README.md"
-keyword = ["arabic", "text"]
+readme = "README.md"
+keywords = ["arabic", "text"]
 
 [dependencies]
 constcat = "0.5.0"
