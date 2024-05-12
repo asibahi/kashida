@@ -107,7 +107,9 @@ fn find_kashidas_in_glyph_run(
 
         // heavy penalty on two letter words
         (Some(preceding), Some(g), None, None)
-            if preceding.contains(|c| CONNECTORS_EXCEPT_LAMS.contains(&c)) =>
+            if preceding.contains(|c| CONNECTORS_EXCEPT_LAMS.contains(&c))
+                || (preceding.contains(|c| LAMS.contains(&c))
+                    && g.chars().all(|c| !ALEFS.contains(&c))) =>
         {
             insert_candidate(KashidaCandidate::new(breakpoint(g), 9));
         }
