@@ -191,9 +191,24 @@ fn find_kashidas_in_glyph_run(
 #[cfg(test)]
 mod tests {
     extern crate std;
+    use std::{println, vec};
+
+    use super::*;
 
     #[test]
-    fn test1() {
-        todo!()
+    fn jalala_no_candidates() {
+        let input = "الله";
+        let candidates = find_kashidas_arabic(input);
+
+        assert_eq!(candidates.len(), 0);
+    }
+
+    #[test]
+    fn basmala_candidates() {
+        let input = "بسم الله الرحمن الرحيم";
+        let candidates = find_kashidas_arabic(input);
+
+        println!("{:?}", candidates);
+        assert_eq!(candidates, vec![4, 37, 26].into_boxed_slice());
     }
 }
