@@ -100,17 +100,16 @@ fn find_kashidas_in_glyph_run(
                 && g2.contains(|c| LAMS.contains(&c))
                 && g3.contains(|c| HEHS.contains(&c)) => {}
 
-        // If Input contains Kashida, that's the place
+        // If Input contains Kashida, that's the place (unless the Kashida has a vowel on it)
         (_, Some(g), _, _) if g.chars().all(|c| c == KASHIDA) => {
             insert_candidate(KashidaCandidate::new(breakpoint(g), 0));
         }
 
-        // skip two letter words
-        (Some(_), Some(_), None, None) => {}
-
-        // If Input contains Kashida, that's the place (unless the Kashida has a vowel on it)
-        (_, Some(g), _, _) if g.chars().all(|c| c == KASHIDA) => {
-            insert_candidate(KashidaCandidate::new(breakpoint(g), 0));
+        // heavy penalty on two letter words
+        (Some(preceding), Some(g), None, None)
+            if preceding.contains(|c| CONNECTORS_EXCEPT_LAMS.contains(&c)) =>
+        {
+            insert_candidate(KashidaCandidate::new(breakpoint(g), 9));
         }
 
         // following ســـ or صـــ
