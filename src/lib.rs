@@ -85,7 +85,7 @@ fn find_kashidas_arabic(input: &str) -> Box<[usize]> {
     ret.into_iter().map(|kc| kc.breakpoint).collect()
 }
 
-// BIG MATCH based on:
+// BIG MATCH based loosely on:
 // https://web.archive.org/web/20030719183154/http://www.microsoft.com/middleeast/msdn/JustifyingText-CSS.aspx
 fn find_kashidas_in_glyph_run(
     (g1, g2, g3, g4): (Option<&str>, Option<&str>, Option<&str>, Option<&str>),
@@ -101,7 +101,15 @@ fn find_kashidas_in_glyph_run(
                 && g3.contains(|c| HEHS.contains(&c)) => {}
 
         // If Input contains Kashida, that's the place
-        (_, Some(g), _, _) if g.contains(KASHIDA) => {
+        (_, Some(g), _, _) if g.chars().all(|c| c == KASHIDA) => {
+            insert_candidate(KashidaCandidate::new(breakpoint(g), 0));
+        }
+
+        // skip two letter words
+        (Some(_), Some(_), None, None) => {}
+
+        // If Input contains Kashida, that's the place (unless the Kashida has a vowel on it)
+        (_, Some(g), _, _) if g.chars().all(|c| c == KASHIDA) => {
             insert_candidate(KashidaCandidate::new(breakpoint(g), 0));
         }
 
@@ -144,7 +152,7 @@ fn find_kashidas_in_glyph_run(
             };
         }
 
-        // if there is a connection between two lettets.
+        // if there is a connection between two letters.
         // before ــلا  . It is *not* counted as an indivisible grapheme for some reason.
         (Some(preceding), Some(fst), Some(snd), _)
             if preceding.contains(|c| ALL_CONNECTORS.contains(&c))
@@ -176,11 +184,15 @@ fn find_kashidas_in_glyph_run(
             else if preceding.chars().all(|c| !LAMS.contains(&c))
                 && g.contains(|c| ALEFS.contains(&c))
             {
-                insert_candidate(KashidaCandidate::new(breakpoint, 1));
+                insert_candidate(KashidaCandidate::new(breakpoint, 4));
             }
             // before ــو
             else if g.contains(|c| WAWS.contains(&c)) {
                 insert_candidate(KashidaCandidate::new(breakpoint, 5));
+            }
+            // before other things
+            else if preceding.chars().all(|c| !LAMS.contains(&c)) {
+                insert_candidate(KashidaCandidate::new(breakpoint, 7));
             }
         }
 
