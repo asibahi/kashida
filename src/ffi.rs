@@ -16,7 +16,7 @@ extern "C" fn find_kashidas_arabic(
     let input = unsafe { CStr::from_ptr(input) };
     let Ok(input) = input.to_str() else { return 0 };
 
-    let result = super::find_kashidas_arabic(input);
+    let result = super::arabic::find_kashidas(input);
     let ret = result.len();
 
     unsafe { out_candidates.write((*result).as_ptr()) };
