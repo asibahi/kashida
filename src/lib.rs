@@ -5,6 +5,7 @@ extern crate alloc;
 mod arabic;
 mod global;
 mod ffi;
+mod syriac;
 
 use alloc::{
     borrow::{Cow, ToOwned},
@@ -32,6 +33,7 @@ impl KashidaCandidate {
 #[derive(Clone, Copy)]
 pub enum Script {
     Arabic,
+    Syriac,
 }
 
 /// Main entry point.
@@ -46,6 +48,7 @@ pub enum Script {
 pub fn find_kashidas(input: &str, script: Script) -> Box<[usize]> {
     match script {
         Script::Arabic => arabic::find_kashidas(input),
+        Script::Syriac => syriac::find_kashidas(input),
     }
 }
 
@@ -66,7 +69,7 @@ pub fn place_kashidas<'a>(
         let mut locs = kashida_locs.iter().cycle().take(kashida_count).collect::<Vec<_>>();
         locs.sort_unstable_by(|a, b| b.cmp(a));
         for kc in locs {
-            buffer.insert(*kc, 'ـ');
+            buffer.insert(*kc, 'ـ'); // e.g. N'Ko uses a different character
         }
         Cow::Owned(buffer)
     }
