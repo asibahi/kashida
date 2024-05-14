@@ -28,18 +28,19 @@ impl KashidaCandidate {
     }
 }
 
-/// Script to find Kashidas in. Only Arabic for now but potential to add Syriac and Nko
+/// Script to find Kashidas in. Only Arabic and Syriac for now.
+/// Use Unknown to get the generic function.
 #[non_exhaustive]
 #[derive(Clone, Copy)]
 pub enum Script {
     Arabic,
     Syriac,
-    Unknwon,
+    Unknown,
 }
 
 /// Main entry point.
 ///
-/// Does not verify string is valid Arabic script.
+/// Does not verify string is valid for the language chosen.
 ///
 /// Returns a list of byte-positions to insert the Kashida in, sorted by priority.
 ///
@@ -50,7 +51,7 @@ pub fn find_kashidas(input: &str, script: Script) -> Box<[usize]> {
     match script {
         Script::Arabic => arabic::find_kashidas(input),
         Script::Syriac => syriac::find_kashidas(input),
-        Script::Unknwon => global::find_kashidas(input),
+        Script::Unknown => global::find_kashidas(input),
     }
 }
 
