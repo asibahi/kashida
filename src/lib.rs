@@ -34,6 +34,7 @@ impl KashidaCandidate {
 pub enum Script {
     Arabic,
     Syriac,
+    Unknwon,
 }
 
 /// Main entry point.
@@ -49,6 +50,7 @@ pub fn find_kashidas(input: &str, script: Script) -> Box<[usize]> {
     match script {
         Script::Arabic => arabic::find_kashidas(input),
         Script::Syriac => syriac::find_kashidas(input),
+        Script::Unknwon => global::find_kashidas(input),
     }
 }
 
