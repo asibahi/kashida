@@ -3,8 +3,8 @@
 extern crate alloc;
 
 mod arabic;
-mod global;
 mod ffi;
+mod global;
 mod syriac;
 
 use alloc::{
@@ -59,6 +59,8 @@ pub fn find_kashidas(input: &str, script: Script) -> Box<[usize]> {
 /// To be used after `find_kashidas`. Make sure the same text is passed to both,
 /// and the output of the first function is used. Doesn't allocate if it does not
 /// have to.
+///
+/// Uses U+0640 ARABIC TATWEEL, which is used for most connected scripts.
 pub fn place_kashidas<'a>(
     text: &'a str,
     kashida_locs: &'_ [usize],
@@ -71,7 +73,7 @@ pub fn place_kashidas<'a>(
         let mut locs = kashida_locs.iter().cycle().take(kashida_count).collect::<Vec<_>>();
         locs.sort_unstable_by(|a, b| b.cmp(a));
         for kc in locs {
-            buffer.insert(*kc, 'ـ'); // e.g. N'Ko uses a different character
+            buffer.insert(*kc, 'ـ'); // e.g. N'Ko uses a different character (U+07FA: NKO LAJANYALAN)
         }
         Cow::Owned(buffer)
     }

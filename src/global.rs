@@ -1,5 +1,4 @@
 use alloc::boxed::Box;
-use core::iter;
 use hashbrown::HashMap;
 use itertools::Itertools;
 use unicode_joining_type::{get_joining_type, JoiningType};
@@ -34,8 +33,7 @@ pub fn find_kashidas(input: &str) -> Box<[usize]> {
             .segment_str(word)
             .tuple_windows()
             .map(|(gb1, gb2)| Some(&word[gb1..gb2]))
-            .pad_using(2, |_| None)
-            .chain(iter::once(None))
+            .pad_using(3, |_| None)
             .tuple_windows();
 
         for glyph_window in graphemes {

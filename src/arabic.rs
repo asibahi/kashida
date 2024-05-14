@@ -143,7 +143,6 @@ fn find_kashidas_in_glyph_run(
 
         // deal with لا early
         // it is not counted as a grapheme for some reason
-        (Some(lam), Some(alef), ..) if lam.contains(is_lam) && alef.contains(is_alef) => {}
         (Some(preceding), Some(lam), Some(alef), _)
         | (_, Some(preceding), Some(lam), Some(alef))
             if preceding.contains(joins_following)
@@ -152,7 +151,8 @@ fn find_kashidas_in_glyph_run(
         {
             insert_candidate(KashidaCandidate::new(breakpoint(lam), 3));
         }
-        (Some(_), Some(lam), Some(alef), _) if lam.contains(is_lam) && alef.contains(is_alef) => {}
+        (Some(lam), Some(alef), ..) | (Some(_), Some(lam), Some(alef), _)
+            if lam.contains(is_lam) && alef.contains(is_alef) => {}
 
         // heavy penalty on two letter words
         (Some(preceding), Some(g), None, None)

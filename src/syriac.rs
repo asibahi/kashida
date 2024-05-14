@@ -2,13 +2,14 @@ use alloc::{boxed::Box, vec::Vec};
 use core::iter;
 use hashbrown::{hash_map::Entry, HashMap};
 use itertools::Itertools;
-// use unicode_joining_type::{get_joining_group, JoiningGroup};
 
 use crate::global::*;
 use crate::KashidaCandidate;
 
 #[must_use]
 // this function is currently same code as in Arabic. WET because might change later?
+// Useful resources: https://www.unicode.org/versions/Unicode15.0.0/ch09.pdf
+//                   https://bug-attachments.documentfoundation.org/attachment.cgi?id=182206
 pub fn find_kashidas(input: &str) -> Box<[usize]> {
     let mut candidates: HashMap<_, KashidaCandidate> = HashMap::with_capacity(input.len() / 2);
 
@@ -63,18 +64,14 @@ fn find_kashidas_in_glyph_run(
         (_, Some(preceding), Some(g), None)
             if preceding.contains(joins_following) && g.contains(joins_preceding) =>
         {
-            {
-                insert_candidate(KashidaCandidate::new(breakpoint(g), 1));
-            };
+            insert_candidate(KashidaCandidate::new(breakpoint(g), 1));
         }
 
         // any?
         (Some(preceding), Some(g), ..)
             if preceding.contains(joins_following) && g.contains(joins_preceding) =>
         {
-            {
-                insert_candidate(KashidaCandidate::new(breakpoint(g), 2));
-            };
+            insert_candidate(KashidaCandidate::new(breakpoint(g), 2));
         }
         _ => {} // don't add other things
     }

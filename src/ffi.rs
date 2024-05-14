@@ -8,21 +8,45 @@ use core::ffi::{c_char, CStr};
 
 // Idea here is that the caller passes a pointer to out_candidates, where I go and write in the candidates and
 // return their length. Then they go and read the values. Then call the below function.
-#[no_mangle]
-extern "C" fn find_kashidas_arabic(
+fn shared_ffi_core(
     input: *const c_char,
     out_candidates: *mut *const usize,
+    inner: impl FnOnce(&str) -> Box<[usize]>,
 ) -> usize {
     let input = unsafe { CStr::from_ptr(input) };
     let Ok(input) = input.to_str() else { return 0 };
 
-    let result = super::arabic::find_kashidas(input);
+    let result = inner(input);
     let ret = result.len();
 
     unsafe { out_candidates.write((*result).as_ptr()) };
     core::mem::forget(result);
 
     ret
+}
+
+#[no_mangle]
+extern "C" fn find_kashidas_arabic(
+    input: *const c_char,
+    out_candidates: *mut *const usize,
+) -> usize {
+    shared_ffi_core(input, out_candidates, super::arabic::find_kashidas)
+}
+
+#[no_mangle]
+extern "C" fn find_kashidas_syriac(
+    input: *const c_char,
+    out_candidates: *mut *const usize,
+) -> usize {
+    shared_ffi_core(input, out_candidates, super::syriac::find_kashidas)
+}
+
+#[no_mangle]
+extern "C" fn find_kashidas_generic(
+    input: *const c_char,
+    out_candidates: *mut *const usize,
+) -> usize {
+    shared_ffi_core(input, out_candidates, super::global::find_kashidas)
 }
 
 // This is needed apparently.
