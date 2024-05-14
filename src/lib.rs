@@ -3,6 +3,7 @@
 extern crate alloc;
 
 mod arabic;
+mod global;
 mod ffi;
 
 use alloc::{

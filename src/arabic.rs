@@ -2,21 +2,11 @@ use alloc::{boxed::Box, vec::Vec};
 use core::iter;
 use hashbrown::{hash_map::Entry, HashMap};
 use itertools::Itertools;
-use unicode_joining_type::*;
+use unicode_joining_type::{get_joining_group, JoiningGroup};
 
-use super::KashidaCandidate;
+use crate::global::*;
+use crate::KashidaCandidate;
 
-pub const KASHIDA: char = '\u{0640}';
-
-fn is_joiner(c: char) -> bool {
-    matches!(get_joining_type(c), JoiningType::DualJoining | JoiningType::JoinCausing)
-}
-fn is_letter(c: char) -> bool {
-    matches!(
-        get_joining_type(c),
-        JoiningType::DualJoining | JoiningType::JoinCausing | JoiningType::RightJoining
-    )
-}
 fn is_alef(c: char) -> bool {
     matches!(get_joining_group(c), JoiningGroup::Alef)
 }
@@ -147,7 +137,7 @@ fn find_kashidas_in_glyph_run(
                 && g3.contains(|c| is_heh(c) || is_teh_marbouta(c)) => {}
 
         // If Input contains Kashida, that's the place (unless the Kashida has a vowel on it)
-        (_, Some(g), _, _) if g.chars().all(|c| c == KASHIDA) => {
+        (_, Some(g), _, _) if g.chars().all(is_kashida) => {
             insert_candidate(KashidaCandidate::new(breakpoint(g), 0))
         }
 
@@ -156,7 +146,9 @@ fn find_kashidas_in_glyph_run(
         (Some(lam), Some(alef), ..) if lam.contains(is_lam) && alef.contains(is_alef) => {}
         (Some(preceding), Some(lam), Some(alef), _)
         | (_, Some(preceding), Some(lam), Some(alef))
-            if preceding.contains(is_joiner) && lam.contains(is_lam) && alef.contains(is_alef) =>
+            if preceding.contains(joins_following)
+                && lam.contains(is_lam)
+                && alef.contains(is_alef) =>
         {
             insert_candidate(KashidaCandidate::new(breakpoint(lam), 3));
         }
@@ -164,21 +156,21 @@ fn find_kashidas_in_glyph_run(
 
         // heavy penalty on two letter words
         (Some(preceding), Some(g), None, None)
-            if preceding.contains(is_joiner) && g.contains(is_letter) =>
+            if preceding.contains(joins_following) && g.contains(joins_preceding) =>
         {
             insert_candidate(KashidaCandidate::new(breakpoint(g), 9));
         }
 
         // following ســـ or صـــ
         (Some(g1), Some(g2), ..) | (_, Some(g1), Some(g2), _)
-            if g1.contains(is_seen_or_sad) && g2.contains(is_letter) =>
+            if g1.contains(is_seen_or_sad) && g2.contains(joins_preceding) =>
         {
             insert_candidate(KashidaCandidate::new(breakpoint(g2), 1));
         }
 
         // before ـــبي or ـــيم
         (Some(preceding), Some(fst), Some(snd), None)
-            if preceding.contains(is_joiner)
+            if preceding.contains(joins_following)
                 && fst.contains(is_tooth)
                 && snd.contains(|c| is_final_yeh(c) || is_meem(c)) =>
         {
@@ -186,14 +178,16 @@ fn find_kashidas_in_glyph_run(
         }
         // before ـــبن
         (Some(preceding), Some(fst), Some(snd), None)
-            if preceding.contains(is_joiner) && fst.contains(is_tooth) && snd.contains(is_noon) =>
+            if preceding.contains(joins_following)
+                && fst.contains(is_tooth)
+                && snd.contains(is_noon) =>
         {
             insert_candidate(KashidaCandidate::new(breakpoint(fst), 4));
         }
 
         // last letter in the word
         (_, Some(preceding), Some(g), None)
-            if preceding.contains(is_joiner) && g.contains(is_letter) =>
+            if preceding.contains(joins_following) && g.contains(joins_preceding) =>
         // before ـــه
         {
             if g.contains(|c| is_heh(c) || is_teh_marbouta(c)) {
@@ -216,14 +210,16 @@ fn find_kashidas_in_glyph_run(
         // if there is a connection between two letters.
         // before ــبر
         (Some(preceding), Some(fst), Some(snd), _)
-            if preceding.contains(is_joiner) && fst.contains(is_tooth) && snd.contains(is_reh) =>
+            if preceding.contains(joins_following)
+                && fst.contains(is_tooth)
+                && snd.contains(is_reh) =>
         {
             insert_candidate(KashidaCandidate::new(breakpoint(fst), 4));
         }
 
         // if there is a connection before one letter
         (Some(preceding), Some(g), ..) | (_, Some(preceding), Some(g), _)
-            if preceding.contains(|c| is_joiner(c) && !is_lam(c)) =>
+            if preceding.contains(|c| joins_following(c) && !is_lam(c)) =>
         {
             let breakpoint = breakpoint(g);
 
