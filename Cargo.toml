@@ -1,6 +1,6 @@
 [package]
 name = "kashida"
-version = "0.0.3"
+version = "0.0.4"
 edition = "2021"
 authors = ["Abdul Rahman Sibahi <a.sibahi@gmail.com"]
 description = "Crate to insert Kashidas into Arabic text, for justification purposes."
