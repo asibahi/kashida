@@ -11,7 +11,6 @@ use alloc::{
     vec::Vec,
 };
 
-
 #[derive(PartialEq, Eq, Hash, Debug, Clone, Copy)]
 struct KashidaCandidate {
     /// where the candidate is
@@ -49,7 +48,6 @@ pub fn find_kashidas(input: &str, script: Script) -> Box<[usize]> {
     }
 }
 
-
 /// Convenience function to place the kashidas you found into your string.
 ///
 /// To be used after `find_kashidas`. Make sure the same text is passed to both,
@@ -72,4 +70,3 @@ pub fn place_kashidas<'a>(
         Cow::Owned(buffer)
     }
 }
-

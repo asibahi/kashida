@@ -4,7 +4,7 @@ use core::ffi::{c_char, CStr};
 // I have absolutely no clue how any of this works or whether it does. Or how even to actually use it from C or C++.
 // If you know please test this and let me know how to fix it. (Or least let me know the problem).
 
-// This seems useful: https://ultrasaurus.com/2020/01/writing-c-library-in-rust/ 
+// This seems useful: https://ultrasaurus.com/2020/01/writing-c-library-in-rust/
 
 // Idea here is that the caller passes a pointer to out_candidates, where I go and write in the candidates and
 // return their length. Then they go and read the values. Then call the below function.
