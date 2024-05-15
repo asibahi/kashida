@@ -1,9 +1,13 @@
+
+![Crates.io Version](https://img.shields.io/crates/v/kashida)
+![docs.rs](https://img.shields.io/docsrs/kashida)
+
 # Kashida
 
-If you want to justify Arabic text, you eventually need to insert kashidas (Unicode character U+640, or ـ ) between letters. This mini-crate does a job at giving you hopefully decent looking candidates. Logic is based loosely on the discussion here: https://web.archive.org/web/20030719183154/http://www.microsoft.com/middleeast/msdn/JustifyingText-CSS.aspx
+If you want to justify Arabic (or Syriac, or any other connected script) text, you eventually need to insert kashidas (Unicode character U+640, or ـ ) between letters. This mini-crate does a job at giving you hopefully decent looking candidates. Logic for Arabic is based loosely on the [Microsoft discussion here](https://web.archive.org/web/20030719183154/http://www.microsoft.com/middleeast/msdn/JustifyingText-CSS.aspx). Syriac is based on [this document](https://bug-attachments.documentfoundation.org/attachment.cgi?id=182206).
 
-The library has currently one function, named `find_kashidas`. You give it an Arabic string, and it gives a sorted, by priority, list of Kashida location candidates, in byte index. Perfecty usable with `String::insert`. There is no verification done on whether the string is truly Arabic or not. It works for voweled texts fine.
+The main entry point of the library is a `find_kashidas`. You give it a string, and it gives a sorted, by priority, list of Kashida location candidates, in byte index. Perfecty usable with `String::insert`, or the convenience function provided of `place_kashidas`. There is no verification done on whether the string is truly the script you say it is or not. It works for voweled texts fine.
 
 Oh it is `no_std` as well.
 
-The `Script` enum has only one Script currently but it allows extending the crate to other scripts (such as Syriac or Nko). The reason I am not adding those scripts myself is that I cannot read Syriac or Nko. But some better people might.
+The `Script` enum has `Arabic`, `Syriac`, and `Unknown`. Arabic and Syriac have custom rules and priorities, but if you use the `Unknown` variant you'd get a generic set of rules that  should, in theory, work for other scripts. If you can read and contribute these other scripts, help would be most welcome.
