@@ -33,7 +33,7 @@ pub fn find_kashidas(input: &str) -> Box<[usize]> {
             .segment_str(word)
             .tuple_windows()
             .map(|(gb1, gb2)| Some(&word[gb1..gb2]))
-            .pad_using(3, |_| None)
+            .pad_using(2, |_| None)
             .tuple_windows();
 
         for glyph_window in graphemes {
@@ -47,13 +47,13 @@ pub fn find_kashidas(input: &str) -> Box<[usize]> {
 }
 
 fn find_kashidas_in_glyph_run(
-    (g1, g2, g3): (Option<&str>, Option<&str>, Option<&str>),
+    (g1, g2): (Option<&str>, Option<&str>),
     input: &str,
     mut insert_candidate: impl FnMut(usize),
 ) {
     let breakpoint = |g: &str| g.as_ptr() as usize - input.as_ptr() as usize;
-    match (g1, g2, g3) {
-        (Some(preceding), Some(g), ..)
+    match (g1, g2) {
+        (Some(preceding), Some(g))
             if preceding.contains(joins_following) && g.contains(joins_preceding) =>
         {
             insert_candidate(breakpoint(g));
