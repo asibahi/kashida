@@ -17,7 +17,7 @@ pub(crate) fn joins_preceding(c: char) -> bool {
 }
 
 #[must_use]
-pub fn find_kashidas(input: &str) -> Box<[usize]> {
+pub(crate) fn find_kashidas(input: &str) -> Box<[usize]> {
     let mut candidates: HashMap<_, usize> = HashMap::with_capacity(input.len() / 2);
 
     let word_segmenter = icu_segmenter::WordSegmenter::new_auto();

@@ -19,7 +19,7 @@ fn is_lamadh(c: char) -> bool {
 // Useful resources: https://www.unicode.org/versions/Unicode15.0.0/ch09.pdf
 //                   https://bug-attachments.documentfoundation.org/attachment.cgi?id=182206
 #[must_use]
-pub fn find_kashidas(input: &str) -> Box<[usize]> {
+pub(crate) fn find_kashidas(input: &str) -> Box<[usize]> {
     let mut candidates: HashMap<_, KashidaCandidate> = HashMap::with_capacity(input.len() / 2);
 
     let word_segmenter = icu_segmenter::WordSegmenter::new_auto();
