@@ -1,13 +1,13 @@
 [package]
 name = "kashida"
-version = "0.0.5"
+version = "0.0.6"
 edition = "2021"
 authors = ["Abdul Rahman Sibahi <a.sibahi@gmail.com"]
-description = "Crate to insert Kashidas into Arabic text, for justification purposes."
+description = "Insert Kashidas/Tatweel into Arabic text, e.g. for justification purposes."
 license = "MIT"
 repository = "https://github.com/asibahi/kashida"
 readme = "README.md"
-keywords = ["arabic", "text"]
+keywords = ["arabic", "text", "justification"]
 
 [dependencies]
 hashbrown = "0.14.5"
