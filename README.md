@@ -11,3 +11,5 @@ The main entry point of the library is a `find_kashidas`. You give it a string, 
 Oh it is `no_std` as well.
 
 The `Script` enum has `Arabic`, `Syriac`, and `Unknown`. Arabic and Syriac have custom rules and priorities, but if you use the `Unknown` variant you'd get a generic set of rules that  should, in theory, work for other scripts. If you can read and contribute these other scripts, help would be most welcome.
+
+I tried to add a couple of C FFI functions, with help from Rust Discord. However, I don't understand C enough to know how to use them. If you can try them and let me know how to improve them, it would be very helpful.

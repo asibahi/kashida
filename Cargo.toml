@@ -1,6 +1,6 @@
 [package]
 name = "kashida"
-version = "0.0.6"
+version = "0.0.7"
 edition = "2021"
 authors = ["Abdul Rahman Sibahi <a.sibahi@gmail.com"]
 description = "Insert Kashidas/Tatweel into Arabic text, e.g. for justification purposes."
@@ -12,5 +12,5 @@ keywords = ["arabic", "text", "justification"]
 [dependencies]
 hashbrown = "0.14.5"
 icu_segmenter = "1.4.0"
-itertools = { version = "0.12", default-features = false }
+itertools = { version = "0.13", default-features = false }
 unicode-joining-type = "0.7.0"
