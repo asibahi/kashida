@@ -79,3 +79,20 @@ pub fn place_kashidas<'a>(
         Cow::Owned(buffer)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use alloc::vec;
+
+    #[test]
+    fn basmala_placement() {
+        let input = "بسم الله الرحمن الرحيم";
+        let candidates = crate::arabic::find_kashidas(input);
+
+        let output = place_kashidas(input, &candidates, 25);
+
+        assert_eq!(candidates, vec![4, 37, 26].into_boxed_slice());
+        assert_eq!(output, "بســـــــــم الله الرحمــــــــن الرحــــــــيم");
+    }
+}
