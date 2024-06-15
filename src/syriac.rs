@@ -20,7 +20,8 @@ fn is_lamadh(c: char) -> bool {
 //                   https://bug-attachments.documentfoundation.org/attachment.cgi?id=182206
 #[must_use]
 pub(crate) fn find_kashidas(input: &str) -> Box<[usize]> {
-    let mut candidates: HashMap<_, KashidaCandidate> = HashMap::with_capacity(input.len() / 2);
+    let mut candidates: HashMap<_, KashidaCandidate> =
+        HashMap::with_capacity(input.split_whitespace().count());
 
     let word_segmenter = icu_segmenter::WordSegmenter::new_auto();
     let grapheme_segmenter = icu_segmenter::GraphemeClusterSegmenter::new();
@@ -68,7 +69,7 @@ fn find_kashidas_in_glyph_run(
     match (g1, g2) {
         // If Input contains Kashida, that's the place
         (Some(g), _) if g.chars().all(is_kashida) => {
-            insert_candidate(KashidaCandidate::new(breakpoint(g) + g.len(), 0))
+            insert_candidate(KashidaCandidate::new(breakpoint(g) + g.len(), 0));
         }
 
         // deal with لا early

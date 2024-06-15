@@ -86,7 +86,8 @@ fn is_final_yeh(c: char) -> bool {
 
 #[must_use]
 pub(crate) fn find_kashidas(input: &str) -> Box<[usize]> {
-    let mut candidates: HashMap<_, KashidaCandidate> = HashMap::with_capacity(input.len() / 2);
+    let mut candidates: HashMap<_, KashidaCandidate> =
+        HashMap::with_capacity(input.split_whitespace().count());
 
     let word_segmenter = icu_segmenter::WordSegmenter::new_auto();
     let grapheme_segmenter = icu_segmenter::GraphemeClusterSegmenter::new();
@@ -132,13 +133,11 @@ fn find_kashidas_in_glyph_run(
     match (g1, g2, g3, g4) {
         // skip لفظ الجلالة
         (Some(g1), Some(g2), Some(g3), None)
-            if g1.contains(is_lam)
-                && g2.contains(is_lam)
-                && g3.contains(|c| is_heh(c) || is_teh_marbouta(c)) => {}
+            if g1.contains(is_lam) && g2.contains(is_lam) && g3.contains(is_heh) => {}
 
         // If Input contains Kashida, that's the place (unless the Kashida has a vowel on it)
         (_, Some(g), _, _) if g.chars().all(is_kashida) => {
-            insert_candidate(KashidaCandidate::new(breakpoint(g), 0))
+            insert_candidate(KashidaCandidate::new(breakpoint(g), 0));
         }
 
         // deal with لا early

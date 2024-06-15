@@ -18,7 +18,8 @@ pub(crate) fn joins_preceding(c: char) -> bool {
 
 #[must_use]
 pub(crate) fn find_kashidas(input: &str) -> Box<[usize]> {
-    let mut candidates: HashMap<_, usize> = HashMap::with_capacity(input.len() / 2);
+    let mut candidates: HashMap<_, usize> =
+        HashMap::with_capacity(input.split_whitespace().count());
 
     let word_segmenter = icu_segmenter::WordSegmenter::new_auto();
     let grapheme_segmenter = icu_segmenter::GraphemeClusterSegmenter::new();

@@ -62,6 +62,7 @@ pub fn find_kashidas(input: &str, script: Script) -> Box<[usize]> {
 /// have to.
 ///
 /// Uses U+0640 ARABIC TATWEEL, which is used for most connected scripts.
+#[must_use]
 pub fn place_kashidas<'a>(
     text: &'a str,
     kashida_locs: &'_ [usize],
