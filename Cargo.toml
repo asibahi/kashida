@@ -10,7 +10,7 @@ readme = "README.md"
 keywords = ["arabic", "text", "justification"]
 
 [dependencies]
-hashbrown = "0.14.5"
+hashbrown = "0.15"
 icu_segmenter = "1.5"
-itertools = { version = "0.13", default-features = false }
-unicode-joining-type = "0.7.0"
+itertools = { version = "0.14", default-features = false }
+unicode-joining-type = "1"

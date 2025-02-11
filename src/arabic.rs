@@ -67,7 +67,7 @@ fn is_heh(c: char) -> bool {
     )
 }
 fn is_teh_marbouta(c: char) -> bool {
-    matches!(get_joining_group(c), JoiningGroup::TehMarbuta | JoiningGroup::HamzaOnHehGoal)
+    matches!(get_joining_group(c), JoiningGroup::TehMarbuta)
 }
 fn is_waw(c: char) -> bool {
     matches!(get_joining_group(c), JoiningGroup::Waw | JoiningGroup::StraightWaw)
