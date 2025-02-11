@@ -1,6 +1,6 @@
 [package]
 name = "kashida"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Abdul Rahman Sibahi <a.sibahi@gmail.com"]
 description = "Insert Kashidas/Tatweel into Arabic text, e.g. for justification purposes."
