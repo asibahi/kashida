@@ -1,4 +1,6 @@
 
+Edit: This has been moved to [SourceHut](https://git.sr.ht/~asibahi/kashida) in an ongoing effort to de-microsoft. All future updates will be there.
+
 ![Crates.io Version](https://img.shields.io/crates/v/kashida)
 ![docs.rs](https://img.shields.io/docsrs/kashida)
 
